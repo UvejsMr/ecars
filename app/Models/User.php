@@ -50,22 +50,22 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
     public function isAdmin()
     {
-        return $this->role?->slug === 'admin';
+        return $this->role_id === 1;
     }
 
     public function isUser()
     {
-        return $this->role?->slug === 'user';
+        return $this->role_id === 2;
     }
 
     public function isServicer()
     {
-        return $this->role?->slug === 'servicer';
+        return $this->role_id === 3;
     }
 
     public function cars()

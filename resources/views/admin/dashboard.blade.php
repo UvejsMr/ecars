@@ -28,7 +28,12 @@
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $user->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $user->email }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $user->role->name ?? 'No Role' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @php
+                                                $role = \App\Models\Role::find($user->role_id);
+                                            @endphp
+                                            {{ $role ? $role->name : 'No Role' }}
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <a href="{{ route('admin.users.show', $user) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">View</a>
                                             <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Car;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,6 +15,16 @@ class DashboardController extends Controller
     {
         $users = User::with('role')->get();
         $cars = Car::with(['user', 'images'])->latest()->get();
+        
+        // Debug
+        foreach ($users as $user) {
+            \Log::info('User role:', [
+                'user_id' => $user->id,
+                'role_id' => $user->role_id,
+                'role' => $user->role
+            ]);
+        }
+        
         return view('admin.dashboard', compact('users', 'cars'));
     }
 
