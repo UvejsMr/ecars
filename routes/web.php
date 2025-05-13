@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +27,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('cars', CarController::class);
         Route::delete('cars/images/{image}', [CarController::class, 'destroyImage'])->name('cars.images.destroy');
     });
+
+    // Chat routes
+    Route::get('/chat/start/{carId}', [ChatController::class, 'startChat'])->name('chat.start');
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{carId}/{userId}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{carId}/{userId}', [ChatController::class, 'store'])->name('chat.store');
 });
 
 // Admin routes
