@@ -51,4 +51,14 @@ class Car extends Model
     {
         return "{$this->year} {$this->make} {$this->model}";
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function isFavoritedBy(User $user)
+    {
+        return $this->favorites()->where('user_id', $user->id)->exists();
+    }
 } 

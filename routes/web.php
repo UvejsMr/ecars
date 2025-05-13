@@ -7,6 +7,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ServicerController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,6 +51,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     Route::get('/appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
     Route::post('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+
+    // Favorites routes
+    Route::middleware(['auth'])->group(function () {
+        Route::post('/favorites/{car}/toggle', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+        Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    });
 });
 
 // Admin routes

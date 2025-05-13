@@ -27,6 +27,16 @@
                             </a>
                         </div>
                     </div>
+
+                    <!-- Watchlist Section -->
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold mb-4">My Watchlist</h3>
+                        <div class="flex space-x-4">
+                            <a href="{{ route('favorites.index') }}" class="bg-yellow-500 hover:bg-yellow-700 text-gray-800 font-bold py-2 px-4 rounded">
+                                View Watchlist
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
