@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ServicerController;
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,20 +14,26 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/user/dashboard', function () {
-        return view('user.dashboard');
-    })->name('user.dashboard');
-    Route::get('/servicer/dashboard', function () {
-        return view('servicer.dashboard');
-    })->name('servicer.dashboard');
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Car routes
+    // User routes
     Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('user.dashboard');
+        })->name('dashboard');
         Route::resource('cars', CarController::class);
         Route::delete('cars/images/{image}', [CarController::class, 'destroyImage'])->name('cars.images.destroy');
+    });
+
+    // Servicer routes
+    Route::prefix('servicer')->name('servicer.')->group(function () {
+        Route::get('/dashboard', [ServicerController::class, 'dashboard'])->name('dashboard');
+        Route::get('/edit', [ServicerController::class, 'edit'])->name('edit');
+        Route::put('/update', [ServicerController::class, 'update'])->name('update');
+        Route::put('/appointments/{id}/status', [ServicerController::class, 'updateAppointmentStatus'])->name('appointments.status');
     });
 
     // Chat routes
@@ -33,6 +41,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/{carId}/{userId}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{carId}/{userId}', [ChatController::class, 'store'])->name('chat.store');
+
+    // Appointment routes
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/appointments/select-servicer/{carId}', [AppointmentController::class, 'selectServicer'])->name('appointments.select-servicer');
+    Route::get('/appointments/create/{userId}/{carId}', [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::get('/appointments/slots/{userId}', [AppointmentController::class, 'getAvailableSlots'])->name('appointments.slots');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::get('/appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
+    Route::post('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 });
 
 // Admin routes
@@ -44,8 +61,12 @@ Route::group(['middleware' => ['auth', 'verified', \App\Http\Middleware\AdminMid
     // Admin car routes
     Route::get('/cars/{car}', [DashboardController::class, 'showCar'])->name('cars.show');
     Route::delete('/cars/{car}', [DashboardController::class, 'destroyCar'])->name('cars.destroy');
+
+    // Admin servicer routes
+    Route::put('/servicers/{servicer}/verify', [DashboardController::class, 'verifyServicer'])->name('servicers.verify');
 });
 
+// Main dashboard redirect
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     $user = Auth::user();
     if ($user->isAdmin()) {

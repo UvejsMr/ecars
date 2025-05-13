@@ -1,16 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Admin Dashboard') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Admin Dashboard') }}
+            </h2>
+            <a href="{{ route('welcome') }}" class="text-blue-500 hover:text-blue-700">
+                Welcome Page
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <a href="/" class="text-blue-500 underline mb-4 inline-block">Go to Welcome Page</a>
-                    
                     <!-- Users Section -->
                     <h3 class="text-lg font-semibold mb-4">All Users</h3>
                     <div class="overflow-x-auto mb-8">
@@ -96,6 +99,34 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold mb-4">Unverified Servicers</h3>
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6">
+                                @forelse($unverifiedServicers as $servicer)
+                                    <div class="border-b last:border-b-0 py-4">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <h4 class="font-medium">{{ $servicer->company_name }}</h4>
+                                                <p class="text-sm text-gray-600">{{ $servicer->user->email }}</p>
+                                                <p class="text-sm text-gray-600">{{ $servicer->phone_number }}</p>
+                                            </div>
+                                            <form action="{{ route('admin.servicers.verify', $servicer) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="px-4 py-2 bg-green-500 text-black rounded-md hover:bg-green-600">
+                                                    Verify Servicer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <p class="text-gray-500">No unverified servicers.</p>
+                                @endforelse
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Car;
 use App\Models\Role;
+use App\Models\Servicer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,8 @@ class DashboardController extends Controller
     public function index()
     {
         $users = User::with('role')->get();
-        $cars = Car::with(['user', 'images'])->latest()->get();
+        $cars = Car::with('user')->get();
+        $unverifiedServicers = Servicer::where('is_verified', false)->with('user')->get();
         
         // Debug
         foreach ($users as $user) {
@@ -25,7 +27,7 @@ class DashboardController extends Controller
             ]);
         }
         
-        return view('admin.dashboard', compact('users', 'cars'));
+        return view('admin.dashboard', compact('users', 'cars', 'unverifiedServicers'));
     }
 
     public function approveUser(User $user)
@@ -82,5 +84,11 @@ class DashboardController extends Controller
         
         $car->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Car deleted successfully.');
+    }
+
+    public function verifyServicer(Servicer $servicer)
+    {
+        $servicer->update(['is_verified' => true]);
+        return redirect()->back()->with('success', 'Servicer verified successfully!');
     }
 }

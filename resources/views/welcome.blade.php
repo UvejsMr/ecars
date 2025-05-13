@@ -13,6 +13,7 @@
                 <a class="navbar-brand fw-bold" href="{{ route('welcome') }}">ECars</a>
                 <div class="d-flex align-items-center">
                     @auth
+                        <a href="{{ route('appointments.index') }}" class="btn btn-outline-primary btn-sm me-2">My Appointments</a>
                         <a href="{{ route('dashboard') }}" class="nav-link me-2">Dashboard</a>
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf

@@ -50,7 +50,7 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo(Role::class, 'role_id', 'id');
+        return $this->belongsTo(Role::class);
     }
 
     public function isAdmin()
@@ -65,11 +65,25 @@ class User extends Authenticatable
 
     public function isServicer()
     {
+        \Illuminate\Support\Facades\Log::info('Checking if user is servicer:', [
+            'user_id' => $this->id,
+            'role_id' => $this->role_id
+        ]);
         return $this->role_id === 3;
     }
 
     public function cars()
     {
         return $this->hasMany(Car::class);
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function servicer()
+    {
+        return $this->hasOne(Servicer::class);
     }
 }
