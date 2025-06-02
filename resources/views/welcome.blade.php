@@ -113,7 +113,9 @@
                 <a class="navbar-brand fw-bold" href="{{ route('welcome') }}">ECars</a>
                 <div class="d-flex align-items-center">
                     @auth
-                        <a href="{{ route('appointments.index') }}" class="btn btn-outline-primary btn-sm me-2">My Appointments</a>
+                        @if(auth()->user()->isUser())
+                            <a href="{{ route('appointments.index') }}" class="btn btn-outline-primary btn-sm me-2">My Appointments</a>
+                        @endif
                         <a href="{{ route('dashboard') }}" class="nav-link me-2">Dashboard</a>
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
@@ -137,6 +139,10 @@
         <main class="container py-5">
             <div class="filter-section">
                 <form method="GET" class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold" for="search">Search</label>
+                        <input type="text" name="search" id="search" class="form-control" placeholder="Search by name or model" value="{{ old('search', $search) }}">
+                    </div>
                     <div class="col-md-3">
                         <label class="form-label fw-semibold" for="make">Brand</label>
                         <select name="make" id="make" class="form-select">
@@ -246,7 +252,6 @@
                     </div>
                 @endforelse
             </div>
-
             <div class="mt-5 d-flex justify-content-center">
                 {{ $cars->links('pagination::bootstrap-5') }}
             </div>

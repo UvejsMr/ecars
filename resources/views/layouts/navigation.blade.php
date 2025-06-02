@@ -8,6 +8,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+                        {{ __('Welcome Page') }}
+                    </x-nav-link>
                     @if(!auth()->user()->isServicer())
                         <x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')">
                             {{ __('Messages') }}
@@ -17,11 +20,6 @@
                         <x-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.*')">
                             {{ __('Book Inspection') }}
                         </x-nav-link>
-                    @endif
-                    @if(auth()->user()->isServicer())
-                    <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
-                        {{ __('Welcome Page') }}
-                    </x-nav-link>
                     @endif
                 </div>
             </div>

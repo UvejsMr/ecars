@@ -17,7 +17,16 @@ class WelcomeController extends Controller
         $gearbox = $request->query('gearbox', 'all');
         $mileage_min = $request->query('mileage_min');
         $mileage_max = $request->query('mileage_max');
+        $search = $request->query('search', '');
         $carsQuery = Car::with(['user', 'images']);
+
+        // Search by name/model if set
+        if ($search !== '') {
+            $carsQuery->where(function($query) use ($search) {
+                $query->where('make', 'like', "%$search%")
+                      ->orWhere('model', 'like', "%$search%");
+            });
+        }
 
         // Filter by make if selected
         if ($make && $make !== 'all') {
@@ -70,6 +79,6 @@ class WelcomeController extends Controller
         $locations = Car::select('location')->distinct()->orderBy('location')->pluck('location');
         $gearboxes = Car::select('gearbox')->distinct()->orderBy('gearbox')->pluck('gearbox');
 
-        return view('welcome', compact('cars', 'sort_price', 'sort_year', 'make', 'makes', 'fuel', 'fuels', 'location', 'locations', 'gearbox', 'gearboxes', 'mileage_min', 'mileage_max'));
+        return view('welcome', compact('cars', 'sort_price', 'sort_year', 'make', 'makes', 'fuel', 'fuels', 'location', 'locations', 'gearbox', 'gearboxes', 'mileage_min', 'mileage_max', 'search'));
     }
 } 
