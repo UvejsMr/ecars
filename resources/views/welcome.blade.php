@@ -139,7 +139,7 @@
                 <form method="GET" class="row g-3 align-items-center">
                     <div class="col-md-3">
                         <label class="form-label fw-semibold" for="make">Brand</label>
-                        <select name="make" id="make" class="form-select" onchange="this.form.submit()">
+                        <select name="make" id="make" class="form-select">
                             <option value="all" {{ ($make ?? '') === 'all' ? 'selected' : '' }}>All Brands</option>
                             @foreach($makes as $brand)
                                 <option value="{{ $brand }}" {{ ($make ?? '') === $brand ? 'selected' : '' }}>{{ $brand }}</option>
@@ -148,7 +148,7 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label fw-semibold" for="fuel">Fuel Type</label>
-                        <select name="fuel" id="fuel" class="form-select" onchange="this.form.submit()">
+                        <select name="fuel" id="fuel" class="form-select">
                             <option value="all" {{ ($fuel ?? '') === 'all' ? 'selected' : '' }}>All Fuel Types</option>
                             @foreach($fuels as $fuelType)
                                 <option value="{{ $fuelType }}" {{ ($fuel ?? '') === $fuelType ? 'selected' : '' }}>{{ $fuelType }}</option>
@@ -157,7 +157,7 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label fw-semibold" for="location">Location</label>
-                        <select name="location" id="location" class="form-select" onchange="this.form.submit()">
+                        <select name="location" id="location" class="form-select">
                             <option value="all" {{ ($location ?? '') === 'all' ? 'selected' : '' }}>All Locations</option>
                             @foreach($locations as $loc)
                                 <option value="{{ $loc }}" {{ ($location ?? '') === $loc ? 'selected' : '' }}>{{ $loc }}</option>
@@ -165,8 +165,27 @@
                         </select>
                     </div>
                     <div class="col-md-3">
+                        <label class="form-label fw-semibold" for="gearbox">Gearbox</label>
+                        <select name="gearbox" id="gearbox" class="form-select">
+                            <option value="all" {{ ($gearbox ?? '') === 'all' ? 'selected' : '' }}>All Gearboxes</option>
+                            @foreach($gearboxes as $gb)
+                                <option value="{{ $gb }}" {{ ($gearbox ?? '') === $gb ? 'selected' : '' }}>{{ $gb }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex flex-column flex-md-row align-items-md-end gap-2">
+                        <div class="w-100">
+                            <label class="form-label fw-semibold" for="mileage_min">Mileage Min</label>
+                            <input type="number" name="mileage_min" id="mileage_min" class="form-control" placeholder="Min" min="0" value="{{ old('mileage_min', $mileage_min) }}">
+                        </div>
+                        <div class="w-100">
+                            <label class="form-label fw-semibold" for="mileage_max">Mileage Max</label>
+                            <input type="number" name="mileage_max" id="mileage_max" class="form-control" placeholder="Max" min="0" value="{{ old('mileage_max', $mileage_max) }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold" for="sort_price">Price</label>
-                        <select name="sort_price" id="sort_price" class="form-select" onchange="this.form.submit()">
+                        <select name="sort_price" id="sort_price" class="form-select">
                             <option value="default" {{ ($sort_price ?? '') === 'default' ? 'selected' : '' }}>Default</option>
                             <option value="price_asc" {{ ($sort_price ?? '') === 'price_asc' ? 'selected' : '' }}>Cheapest first</option>
                             <option value="price_desc" {{ ($sort_price ?? '') === 'price_desc' ? 'selected' : '' }}>Most expensive first</option>
@@ -174,11 +193,14 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label fw-semibold" for="sort_year">Year</label>
-                        <select name="sort_year" id="sort_year" class="form-select" onchange="this.form.submit()">
+                        <select name="sort_year" id="sort_year" class="form-select">
                             <option value="default" {{ ($sort_year ?? '') === 'default' ? 'selected' : '' }}>Default</option>
                             <option value="year_desc" {{ ($sort_year ?? '') === 'year_desc' ? 'selected' : '' }}>Newest first</option>
                             <option value="year_asc" {{ ($sort_year ?? '') === 'year_asc' ? 'selected' : '' }}>Oldest first</option>
                         </select>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary px-5">Filter</button>
                     </div>
                 </form>
             </div>

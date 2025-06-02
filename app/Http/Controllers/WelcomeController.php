@@ -14,6 +14,9 @@ class WelcomeController extends Controller
         $make = $request->query('make', 'all');
         $fuel = $request->query('fuel', 'all');
         $location = $request->query('location', 'all');
+        $gearbox = $request->query('gearbox', 'all');
+        $mileage_min = $request->query('mileage_min');
+        $mileage_max = $request->query('mileage_max');
         $carsQuery = Car::with(['user', 'images']);
 
         // Filter by make if selected
@@ -29,6 +32,19 @@ class WelcomeController extends Controller
         // Filter by location if selected
         if ($location && $location !== 'all') {
             $carsQuery->where('location', $location);
+        }
+
+        // Filter by gearbox if selected
+        if ($gearbox && $gearbox !== 'all') {
+            $carsQuery->where('gearbox', $gearbox);
+        }
+
+        // Filter by mileage range if set
+        if ($mileage_min !== null && $mileage_min !== '') {
+            $carsQuery->where('mileage', '>=', (int)$mileage_min);
+        }
+        if ($mileage_max !== null && $mileage_max !== '') {
+            $carsQuery->where('mileage', '<=', (int)$mileage_max);
         }
 
         // Apply year sort first if set, then price sort
@@ -52,7 +68,8 @@ class WelcomeController extends Controller
         $makes = Car::select('make')->distinct()->orderBy('make')->pluck('make');
         $fuels = Car::select('fuel')->distinct()->orderBy('fuel')->pluck('fuel');
         $locations = Car::select('location')->distinct()->orderBy('location')->pluck('location');
+        $gearboxes = Car::select('gearbox')->distinct()->orderBy('gearbox')->pluck('gearbox');
 
-        return view('welcome', compact('cars', 'sort_price', 'sort_year', 'make', 'makes', 'fuel', 'fuels', 'location', 'locations'));
+        return view('welcome', compact('cars', 'sort_price', 'sort_year', 'make', 'makes', 'fuel', 'fuels', 'location', 'locations', 'gearbox', 'gearboxes', 'mileage_min', 'mileage_max'));
     }
 } 
