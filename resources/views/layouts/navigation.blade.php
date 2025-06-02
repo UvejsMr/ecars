@@ -8,9 +8,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')">
-                        {{ __('Messages') }}
-                    </x-nav-link>
+                    @if(!auth()->user()->isServicer())
+                        <x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')">
+                            {{ __('Messages') }}
+                        </x-nav-link>
+                    @endif
                     @if(auth()->check() && !auth()->user()->isServicer())
                         <x-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.*')">
                             {{ __('Book Inspection') }}
@@ -76,9 +78,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')">
-                {{ __('Messages') }}
-            </x-responsive-nav-link>
+            @if(!auth()->user()->isServicer())
+                <x-responsive-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')">
+                    {{ __('Messages') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
