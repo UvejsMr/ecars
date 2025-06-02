@@ -12,11 +12,23 @@ class WelcomeController extends Controller
         $sort_price = $request->query('sort_price', 'default');
         $sort_year = $request->query('sort_year', 'default');
         $make = $request->query('make', 'all');
+        $fuel = $request->query('fuel', 'all');
+        $location = $request->query('location', 'all');
         $carsQuery = Car::with(['user', 'images']);
 
         // Filter by make if selected
         if ($make && $make !== 'all') {
             $carsQuery->where('make', $make);
+        }
+
+        // Filter by fuel if selected
+        if ($fuel && $fuel !== 'all') {
+            $carsQuery->where('fuel', $fuel);
+        }
+
+        // Filter by location if selected
+        if ($location && $location !== 'all') {
+            $carsQuery->where('location', $location);
         }
 
         // Apply year sort first if set, then price sort
@@ -38,7 +50,9 @@ class WelcomeController extends Controller
 
         $cars = $carsQuery->paginate(9)->withQueryString();
         $makes = Car::select('make')->distinct()->orderBy('make')->pluck('make');
+        $fuels = Car::select('fuel')->distinct()->orderBy('fuel')->pluck('fuel');
+        $locations = Car::select('location')->distinct()->orderBy('location')->pluck('location');
 
-        return view('welcome', compact('cars', 'sort_price', 'sort_year', 'make', 'makes'));
+        return view('welcome', compact('cars', 'sort_price', 'sort_year', 'make', 'makes', 'fuel', 'fuels', 'location', 'locations'));
     }
 } 

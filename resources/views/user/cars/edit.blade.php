@@ -137,6 +137,14 @@
                             <x-input-error class="mt-2" :messages="$errors->get('description')" />
                         </div>
 
+                        <!-- New Images -->
+                        <div>
+                            <x-input-label for="images" :value="__('Add Images')" />
+                            <input type="file" id="images" name="images[]" multiple accept="image/*" class="mt-1 block w-full">
+                            <p class="mt-1 text-sm text-gray-500">You can select up to 10 images. Maximum size: 4MB per image.</p>
+                            <x-input-error class="mt-2" :messages="$errors->get('images')" />
+                        </div>
+
                         <!-- Current Images -->
                         @if($car->images->isNotEmpty())
                             <div class="flex flex-col items-center">
@@ -190,21 +198,6 @@
                                             @endforeach
                                         </div>
                                     @endif
-
-                                    <!-- New Images -->
-                                    <div>
-                                        <x-input-label for="images" :value="__('Add New Images (optional)')" />
-                                        <input type="file" id="images" name="images[]" multiple accept="image/*" class="mt-1 block w-full">
-                                        <p class="mt-1 text-sm text-gray-500">You can select up to 10 images. Maximum size: 2MB per image.</p>
-                                        <x-input-error class="mt-2" :messages="$errors->get('images')" />
-                                    </div>
-
-                                    <div class="flex items-center gap-4">
-                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                            {{ __('Update Car') }}
-                                        </button>
-                                        <a href="{{ route('user.cars.index') }}" class="text-gray-600 hover:text-gray-900">Cancel</a>
-                                    </div>
                                 </div>
                             </div>
                             <script>
@@ -259,8 +252,32 @@
                                 document.addEventListener('DOMContentLoaded', function() {
                                     editShowSlide(0);
                                 });
+
+                                // Add form submission logging
+                                document.getElementById('updateCarForm').addEventListener('submit', function(e) {
+                                    const fileInput = document.getElementById('images');
+                                    console.log('Files selected:', fileInput.files.length);
+                                    for (let i = 0; i < fileInput.files.length; i++) {
+                                        console.log('File', i + 1, ':', fileInput.files[i].name, 'Size:', fileInput.files[i].size);
+                                    }
+                                });
+
+                                // Add file input change logging
+                                document.getElementById('images').addEventListener('change', function(e) {
+                                    console.log('Files selected:', this.files.length);
+                                    for (let i = 0; i < this.files.length; i++) {
+                                        console.log('File', i + 1, ':', this.files[i].name, 'Size:', this.files[i].size);
+                                    }
+                                });
                             </script>
                         @endif
+
+                        <div class="flex items-center gap-4">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                {{ __('Update Car') }}
+                            </button>
+                            <a href="{{ route('user.cars.index') }}" class="text-gray-600 hover:text-gray-900">Cancel</a>
+                        </div>
                     </form>
                 </div>
             </div>

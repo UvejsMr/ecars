@@ -96,7 +96,7 @@ class CarController extends BaseController
                 'equipment' => 'nullable|array',
                 'equipment.*' => 'string|max:255',
                 'description' => 'required|string',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
             ]);
 
             // Debug the validated data

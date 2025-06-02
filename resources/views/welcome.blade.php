@@ -147,6 +147,24 @@
                         </select>
                     </div>
                     <div class="col-md-3">
+                        <label class="form-label fw-semibold" for="fuel">Fuel Type</label>
+                        <select name="fuel" id="fuel" class="form-select" onchange="this.form.submit()">
+                            <option value="all" {{ ($fuel ?? '') === 'all' ? 'selected' : '' }}>All Fuel Types</option>
+                            @foreach($fuels as $fuelType)
+                                <option value="{{ $fuelType }}" {{ ($fuel ?? '') === $fuelType ? 'selected' : '' }}>{{ $fuelType }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold" for="location">Location</label>
+                        <select name="location" id="location" class="form-select" onchange="this.form.submit()">
+                            <option value="all" {{ ($location ?? '') === 'all' ? 'selected' : '' }}>All Locations</option>
+                            @foreach($locations as $loc)
+                                <option value="{{ $loc }}" {{ ($location ?? '') === $loc ? 'selected' : '' }}>{{ $loc }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold" for="sort_price">Price</label>
                         <select name="sort_price" id="sort_price" class="form-select" onchange="this.form.submit()">
                             <option value="default" {{ ($sort_price ?? '') === 'default' ? 'selected' : '' }}>Default</option>
