@@ -6,9 +6,109 @@
         <title>ECars - Find Your Perfect Car</title>
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --primary-color: #2563eb;
+                --secondary-color: #1e40af;
+                --background-color: #f8fafc;
+                --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            }
+            
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: var(--background-color);
+            }
+
+            .navbar {
+                box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+                padding: 1rem 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+                color: var(--primary-color) !important;
+            }
+
+            .hero-section {
+                background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                color: white;
+                padding: 4rem 0;
+                margin-bottom: 3rem;
+            }
+
+            .filter-section {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 1rem;
+                box-shadow: var(--card-shadow);
+                margin-bottom: 2rem;
+            }
+
+            .card {
+                border: none;
+                border-radius: 1rem;
+                box-shadow: var(--card-shadow);
+                transition: transform 0.2s ease-in-out;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+            .card-img-top {
+                border-top-left-radius: 1rem;
+                border-top-right-radius: 1rem;
+                background: #f8f9fa;
+            }
+
+            .btn-primary {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            .btn-primary:hover {
+                background-color: var(--secondary-color);
+                border-color: var(--secondary-color);
+            }
+
+            .btn-outline-primary {
+                color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            .btn-outline-primary:hover {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            .form-select {
+                border-radius: 0.5rem;
+                border: 1px solid #e2e8f0;
+            }
+
+            .pagination {
+                margin-top: 2rem;
+            }
+
+            .page-link {
+                color: var(--primary-color);
+            }
+
+            .page-item.active .page-link {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            footer {
+                background: white;
+                box-shadow: 0 -1px 3px 0 rgb(0 0 0 / 0.1);
+            }
+        </style>
     </head>
-    <body class="bg-light">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4">
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
             <div class="container">
                 <a class="navbar-brand fw-bold" href="{{ route('welcome') }}">ECars</a>
                 <div class="d-flex align-items-center">
@@ -27,56 +127,71 @@
             </div>
         </nav>
 
+        <section class="hero-section">
+            <div class="container text-center">
+                <h1 class="display-4 fw-bold mb-3">Find Your Dream Car</h1>
+                <p class="lead mb-0">Browse through our extensive collection of premium vehicles</p>
+            </div>
+        </section>
+
         <main class="container py-5">
-            <form method="GET" class="mb-4 d-flex justify-content-end gap-2">
-                <label class="me-2 fw-semibold" for="make">Brand:</label>
-                <select name="make" id="make" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="all" {{ ($make ?? '') === 'all' ? 'selected' : '' }}>All Brands</option>
-                    @foreach($makes as $brand)
-                        <option value="{{ $brand }}" {{ ($make ?? '') === $brand ? 'selected' : '' }}>{{ $brand }}</option>
-                    @endforeach
-                </select>
-                <label class="ms-3 me-2 fw-semibold" for="sort_price">Sort by price:</label>
-                <select name="sort_price" id="sort_price" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="default" {{ ($sort_price ?? '') === 'default' ? 'selected' : '' }}>Default</option>
-                    <option value="price_asc" {{ ($sort_price ?? '') === 'price_asc' ? 'selected' : '' }}>Cheapest first</option>
-                    <option value="price_desc" {{ ($sort_price ?? '') === 'price_desc' ? 'selected' : '' }}>Most expensive first</option>
-                </select>
-                <label class="ms-3 me-2 fw-semibold" for="sort_year">Sort by year:</label>
-                <select name="sort_year" id="sort_year" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="default" {{ ($sort_year ?? '') === 'default' ? 'selected' : '' }}>Default</option>
-                    <option value="year_desc" {{ ($sort_year ?? '') === 'year_desc' ? 'selected' : '' }}>Newest first</option>
-                    <option value="year_asc" {{ ($sort_year ?? '') === 'year_asc' ? 'selected' : '' }}>Oldest first</option>
-                </select>
-            </form>
+            <div class="filter-section">
+                <form method="GET" class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold" for="make">Brand</label>
+                        <select name="make" id="make" class="form-select" onchange="this.form.submit()">
+                            <option value="all" {{ ($make ?? '') === 'all' ? 'selected' : '' }}>All Brands</option>
+                            @foreach($makes as $brand)
+                                <option value="{{ $brand }}" {{ ($make ?? '') === $brand ? 'selected' : '' }}>{{ $brand }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold" for="sort_price">Price</label>
+                        <select name="sort_price" id="sort_price" class="form-select" onchange="this.form.submit()">
+                            <option value="default" {{ ($sort_price ?? '') === 'default' ? 'selected' : '' }}>Default</option>
+                            <option value="price_asc" {{ ($sort_price ?? '') === 'price_asc' ? 'selected' : '' }}>Cheapest first</option>
+                            <option value="price_desc" {{ ($sort_price ?? '') === 'price_desc' ? 'selected' : '' }}>Most expensive first</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold" for="sort_year">Year</label>
+                        <select name="sort_year" id="sort_year" class="form-select" onchange="this.form.submit()">
+                            <option value="default" {{ ($sort_year ?? '') === 'default' ? 'selected' : '' }}>Default</option>
+                            <option value="year_desc" {{ ($sort_year ?? '') === 'year_desc' ? 'selected' : '' }}>Newest first</option>
+                            <option value="year_asc" {{ ($sort_year ?? '') === 'year_asc' ? 'selected' : '' }}>Oldest first</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
             <div class="row g-4">
                 @forelse($cars as $car)
                     <div class="col-12 col-sm-6 col-md-4">
-                        <div class="card h-100" style="min-height: 370px;">
+                        <div class="card h-100">
                             @if($car->images->isNotEmpty())
                                 <img src="{{ Storage::url($car->images->first()->image_path) }}"
                                      class="card-img-top"
-                                     style="height: 180px; object-fit: contain; width: 100%; background: #f8f9fa;"
+                                     style="height: 200px; object-fit: contain;"
                                      alt="{{ $car->full_name }}">
                             @else
                                 <div class="bg-light d-flex align-items-center justify-content-center"
-                                     style="height: 180px;">
+                                     style="height: 200px;">
                                     <span class="text-muted">No image available</span>
                                 </div>
                             @endif
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <h5 class="card-title text-truncate">{{ $car->full_name }}</h5>
-                                    <p class="card-text text-muted small mb-2">Posted by {{ $car->user->name }}</p>
-                                </div>
-                                <div class="text-end mt-auto">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold mb-2">{{ $car->full_name }}</h5>
+                                <p class="card-text text-muted small mb-3">Posted by {{ $car->user->name }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-primary fw-bold">${{ number_format($car->price) }}</span>
                                     @auth
-                                        <a href="{{ route('cars.show', $car) }}" class="btn btn-primary btn-sm rounded-pill px-3 d-inline-flex align-items-center gap-1">
-                                            View more <span class="ms-1">&rarr;</span>
+                                        <a href="{{ route('cars.show', $car) }}" class="btn btn-primary btn-sm rounded-pill px-4">
+                                            View Details
                                         </a>
                                     @else
-                                        <a href="{{ route('login', ['redirect' => route('cars.show', $car)]) }}" class="btn btn-primary btn-sm rounded-pill px-3 d-inline-flex align-items-center gap-1">
-                                            View more <span class="ms-1">&rarr;</span>
+                                        <a href="{{ route('login', ['redirect' => route('cars.show', $car)]) }}" class="btn btn-primary btn-sm rounded-pill px-4">
+                                            View Details
                                         </a>
                                     @endauth
                                 </div>
@@ -85,23 +200,25 @@
                     </div>
                 @empty
                     <div class="col-12 text-center py-5">
-                        <p class="text-muted fs-5">No cars available at the moment.</p>
+                        <div class="bg-white rounded-3 p-5 shadow-sm">
+                            <h3 class="text-muted mb-0">No cars available at the moment</h3>
+                        </div>
                     </div>
                 @endforelse
             </div>
-            <div class="mt-4 d-flex flex-column align-items-center">
-                <div>
-                    {{ $cars->links('pagination::bootstrap-5') }}
-                </div>
+
+            <div class="mt-5 d-flex justify-content-center">
+                {{ $cars->links('pagination::bootstrap-5') }}
             </div>
         </main>
 
-        <footer class="bg-white border-top mt-5 py-4">
-            <div class="container text-center text-muted small">
-                &copy; {{ date('Y') }} ECars. All rights reserved.
+        <footer class="py-4 mt-5">
+            <div class="container text-center text-muted">
+                <p class="mb-0">&copy; {{ date('Y') }} ECars. All rights reserved.</p>
             </div>
         </footer>
-        <!-- Bootstrap JS (optional, for dropdowns etc.) -->
+
+        <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
