@@ -1,8 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Complete Your Servicer Profile') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Complete Your Servicer Profile') }}
+            </h2>
+            <a href="{{ route('servicer.dashboard') }}" class="inline-flex items-center gap-2 px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">

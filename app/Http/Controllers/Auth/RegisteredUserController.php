@@ -51,6 +51,8 @@ class RegisteredUserController extends Controller
             'role_id' => $request->role_id,
         ]);
 
+        $user->refresh();
+
         Log::info('User created:', [
             'user_id' => $user->id,
             'role_id' => $user->role_id,

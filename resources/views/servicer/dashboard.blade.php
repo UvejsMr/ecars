@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Servicer Dashboard') }}
             </h2>
-            <a href="{{ route('servicer.edit') }}" class="text-blue-500 hover:text-blue-700 transition-colors duration-200 flex items-center gap-2">
+            <a href="{{ route('servicer.edit') }}" class="inline-flex items-center gap-2 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
