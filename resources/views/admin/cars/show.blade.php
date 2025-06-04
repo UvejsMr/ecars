@@ -5,7 +5,7 @@
                 {{ __('Car Details') }}
             </h2>
             <div class="flex items-center gap-4">
-                <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-gray-900 flex items-center gap-2">
+                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow hover:bg-gray-300 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
@@ -14,8 +14,8 @@
                 <form action="{{ route('admin.cars.destroy', $car) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" 
-                            class="text-red-600 hover:text-red-900 flex items-center gap-2 transition-colors duration-200"
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 px-5 py-2 bg-red-600 text-white font-semibold rounded-lg shadow hover:bg-red-700 transition"
                             onclick="return confirm('Are you sure you want to delete this car?')">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -72,55 +72,63 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <!-- Main Info -->
                         <div class="lg:col-span-2">
-                            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                                <h3 class="text-2xl font-bold mb-4">{{ $car->make }} {{ $car->model }}</h3>
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Year</p>
-                                        <p class="font-semibold">{{ $car->year }}</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Price</p>
-                                        <p class="font-semibold text-blue-600">€{{ number_format($car->price, 2) }}</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Location</p>
-                                        <p class="font-semibold">{{ $car->location }}</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Power</p>
-                                        <p class="font-semibold">{{ $car->power }} HP</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Mileage</p>
-                                        <p class="font-semibold">{{ number_format($car->mileage) }} km</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Gearbox</p>
-                                        <p class="font-semibold">{{ $car->gearbox }}</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Fuel Type</p>
-                                        <p class="font-semibold">{{ $car->fuel }}</p>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-600">Engine Size</p>
-                                        <p class="font-semibold">{{ $car->engine_size }}L</p>
-                                    </div>
+                            <div class="bg-white rounded-2xl shadow-lg p-8 mb-6 border border-gray-100">
+                                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                                    <h3 class="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2 md:mb-0">
+                                        <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13l2-2m0 0l7-7 7 7M5 11v8a2 2 0 002 2h10a2 2 0 002-2v-8" /></svg>
+                                        {{ $car->make }} {{ $car->model }}
+                                    </h3>
+                                    <span class="inline-block px-5 py-2 rounded-full bg-green-100 text-green-700 text-xl font-bold shadow-sm border border-green-200">
+                                        €{{ number_format($car->price, 2) }}
+                                    </span>
                                 </div>
-                            </div>
-
-                            <!-- Description -->
-                            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                                <h3 class="text-xl font-semibold mb-4">Description</h3>
-                                <div class="prose max-w-none">
-                                    <p class="text-gray-700 whitespace-pre-line">{{ $car->description }}</p>
+                                <div class="flex flex-wrap gap-3 mb-6">
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" /></svg>
+                                        {{ $car->year }}
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-200 text-gray-700 text-sm font-semibold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1" /></svg>
+                                        {{ number_format($car->mileage) }} km
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-semibold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                        {{ $car->fuel }}
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-semibold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17l4 4 4-4m0 0V3m0 18H4" /></svg>
+                                        {{ $car->gearbox }}
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-100 text-pink-700 text-sm font-semibold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6" /></svg>
+                                        {{ $car->engine_size }}L
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-semibold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2h5" /></svg>
+                                        {{ $car->power }} HP
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2h5" /></svg>
+                                        {{ $car->location }}
+                                    </span>
+                                </div>
+                                <div class="border-t pt-6 mt-6">
+                                    <h4 class="text-lg font-semibold mb-2 text-gray-800 flex items-center gap-2">
+                                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                        Description
+                                    </h4>
+                                    <div class="prose max-w-none">
+                                        <p class="text-gray-700 whitespace-pre-line">{{ $car->description }}</p>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Equipment -->
-                            <div class="bg-white rounded-xl shadow-sm p-6">
-                                <h3 class="text-xl font-semibold mb-4">Equipment</h3>
+                            <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Equipment
+                                </h3>
                                 @if($car->equipment)
                                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         @foreach($car->equipment as $item)
@@ -141,40 +149,51 @@
                         <!-- Sidebar -->
                         <div class="lg:col-span-1">
                             <!-- Seller Information -->
-                            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                                <h3 class="text-xl font-semibold mb-4">Seller Information</h3>
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <span class="text-blue-600 font-semibold">{{ substr($car->user->name, 0, 1) }}</span>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold">{{ $car->user->name }}</p>
-                                            <p class="text-sm text-gray-600">{{ $car->user->email }}</p>
-                                            <p class="text-sm text-gray-600">{{ $car->user->role->name ?? 'No Role' }}</p>
-                                        </div>
+                            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-gray-100">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    Seller Information
+                                </h3>
+                                <div class="flex flex-col items-center gap-4">
+                                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-3xl font-bold text-blue-600 shadow">
+                                        {{ substr($car->user->name, 0, 1) }}
                                     </div>
-                                    <div class="mt-4">
-                                        <a href="{{ route('admin.users.show', $car->user) }}" 
-                                           class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-black rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
-                                            View Seller Profile
-                                        </a>
+                                    <div class="text-center">
+                                        <p class="font-semibold text-lg text-gray-900">{{ $car->user->name }}</p>
+                                        <p class="text-sm text-gray-600">{{ $car->user->email }}</p>
+                                        @php
+                                            $role = \App\Models\Role::find($car->user->role_id);
+                                            $roleName = $role ? $role->name : 'No Role';
+                                            $roleColor = match($roleName) {
+                                                'Admin' => 'bg-red-100 text-red-700',
+                                                'User' => 'bg-green-100 text-green-700',
+                                                'Servicer' => 'bg-yellow-100 text-yellow-700',
+                                                default => 'bg-gray-200 text-gray-600',
+                                            };
+                                        @endphp
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $roleColor }} mt-2 inline-block">
+                                            {{ $roleName }}
+                                        </span>
                                     </div>
+                                    <a href="{{ route('admin.users.show', $car->user) }}"
+                                       class="inline-flex items-center justify-center px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 transition">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        View Seller Profile
+                                    </a>
                                 </div>
                             </div>
 
                             <!-- Admin Actions -->
-                            <div class="bg-white rounded-xl shadow-sm p-6">
+                            <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
                                 <h3 class="text-xl font-semibold mb-4">Admin Actions</h3>
                                 <div class="space-y-3">
                                     <form action="{{ route('admin.cars.destroy', $car) }}" method="POST" class="w-full">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" 
-                                                class="w-full inline-flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+                                        <button type="submit"
+                                                class="w-full inline-flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-semibold shadow"
                                                 onclick="return confirm('Are you sure you want to delete this car?')">
                                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

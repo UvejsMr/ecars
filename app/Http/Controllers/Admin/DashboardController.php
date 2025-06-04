@@ -12,10 +12,20 @@ use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role')->get();
-        $cars = Car::with('user')->get();
+        $search = $request->query('search', '');
+        $usersQuery = User::with('role');
+        if ($search !== '') {
+            $usersQuery->where(function($query) use ($search) {
+                $query->where('name', 'like', "%$search%")
+                      ->orWhere('email', 'like', "%$search%")
+                      ;
+            });
+        }
+        $users = $usersQuery->get();
+        $cars = Car::with('user')->paginate(6)->withQueryString();
+        $totalCars = Car::count();
         $unverifiedServicers = Servicer::where('is_verified', false)->with('user')->get();
         
         // Debug
@@ -27,7 +37,7 @@ class DashboardController extends Controller
             ]);
         }
         
-        return view('admin.dashboard', compact('users', 'cars', 'unverifiedServicers'));
+        return view('admin.dashboard', compact('users', 'cars', 'unverifiedServicers', 'search', 'totalCars'));
     }
 
     public function approveUser(User $user)
@@ -49,9 +59,7 @@ class DashboardController extends Controller
 
     public function show(User $user)
     {
-        $user->load(['cars' => function ($query) {
-            $query->with('images');
-        }]);
+        $user->load(['role', 'cars.images']);
         return view('admin.users.show', compact('user'));
     }
 
