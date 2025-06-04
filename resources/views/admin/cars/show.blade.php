@@ -34,18 +34,18 @@
                     <!-- Car Images -->
                     @if($car->images->isNotEmpty())
                         <div class="mb-8">
-                            <div class="relative max-w-2xl mx-auto">
+                            <div class="relative max-w-2xl mx-auto group">
                                 <!-- Main Image -->
-                                <div class="relative mx-auto" style="height: 350px; width: 100%; max-width: 600px;">
+                                <div class="relative mx-auto cursor-zoom-in" style="height: 350px; width: 100%; max-width: 600px;" onclick="openModal()">
                                     <div class="bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden" style="height: 100%; width: 100%; position: relative;">
                                         @foreach($car->images as $index => $image)
-                                            <img id="slide-{{ $index }}" src="{{ Storage::url($image->image_path) }}" alt="Car image" class="max-h-full max-w-full object-contain transition-opacity duration-300 ease-in-out mx-auto my-auto" style="opacity: {{ $index === 0 ? '1' : '0' }}; display: {{ $index === 0 ? 'block' : 'none' }}; z-index: 1;">
+                                            <img id="slide-{{ $index }}" src="{{ Storage::url($image->image_path) }}" alt="Car image {{ $index+1 }}" class="main-carousel-img absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ease-in-out mx-auto my-auto rounded-lg {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" style="background: #f1f5f9;" />
                                         @endforeach
                                         @if($car->images->count() > 1)
-                                            <button onclick="prevImage()" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-3 rounded-full hover:bg-opacity-90 z-30 shadow-lg border-2 border-white" style="font-size: 2rem;">
+                                            <button onclick="event.stopPropagation(); prevImage();" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white p-4 rounded-full hover:bg-opacity-90 z-30 shadow-lg border-2 border-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" style="font-size: 2rem;">
                                                 &#8592;
                                             </button>
-                                            <button onclick="nextImage()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-3 rounded-full hover:bg-opacity-90 z-30 shadow-lg border-2 border-white" style="font-size: 2rem;">
+                                            <button onclick="event.stopPropagation(); nextImage();" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white p-4 rounded-full hover:bg-opacity-90 z-30 shadow-lg border-2 border-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500" style="font-size: 2rem;">
                                                 &#8594;
                                             </button>
                                         @endif
@@ -58,14 +58,117 @@
                                 @if($car->images->count() > 1)
                                     <div class="flex justify-center space-x-2 mt-4 thumbnail-nav">
                                         @foreach($car->images as $index => $image)
-                                            <button onclick="goToSlide({{ $index }})" class="w-16 h-16 rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 transition-opacity hover:opacity-75 {{ $index === 0 ? 'ring-2 ring-blue-500' : '' }}">
-                                                <img src="{{ Storage::url($image->image_path) }}" alt="Thumbnail" class="w-full h-full object-cover">
+                                            <button onclick="goToSlide({{ $index }});" class="w-16 h-16 rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 hover:opacity-80 border-2 border-transparent {{ $index === 0 ? 'ring-2 ring-blue-500 border-blue-500' : '' }}">
+                                                <img src="{{ Storage::url($image->image_path) }}" alt="Thumbnail {{ $index+1 }}" class="w-full h-full object-cover">
                                             </button>
                                         @endforeach
                                     </div>
                                 @endif
                             </div>
                         </div>
+                        <!-- Modal/Lightbox for zoom -->
+                        <div id="imageModal" class="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center hidden transition-all duration-300">
+                            <button onclick="closeModal()" class="absolute top-6 right-8 text-white text-3xl font-bold hover:text-red-400 transition z-60">&times;</button>
+                            <div class="relative w-full max-w-3xl flex flex-col items-center">
+                                <img id="modalImage" src="" alt="Zoomed Car Image" class="w-full max-h-[80vh] object-contain rounded-xl shadow-2xl transition-all duration-300" />
+                                <div class="flex justify-between w-full mt-4">
+                                    <button onclick="modalPrevImage()" class="bg-black bg-opacity-60 text-white p-3 rounded-full hover:bg-opacity-90 shadow-lg border-2 border-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">&#8592;</button>
+                                    <button onclick="modalNextImage()" class="bg-black bg-opacity-60 text-white p-3 rounded-full hover:bg-opacity-90 shadow-lg border-2 border-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">&#8594;</button>
+                                </div>
+                                <div id="modal-slide-indicator" class="mt-2 bg-black bg-opacity-60 text-white text-xs px-3 py-1 rounded-full">Image 1 of {{ $car->images->count() }}</div>
+                            </div>
+                        </div>
+                        <script>
+                            let currentSlide = 0;
+                            const totalSlides = {{ $car->images->count() }};
+                            let autoAdvanceInterval = null;
+                            let isModalOpen = false;
+                            const imageUrls = [
+                                @foreach($car->images as $image)
+                                    "{{ Storage::url($image->image_path) }}",
+                                @endforeach
+                            ];
+
+                            function showSlide(index) {
+                                for (let i = 0; i < totalSlides; i++) {
+                                    const img = document.getElementById(`slide-${i}`);
+                                    if (i === index) {
+                                        img.classList.add('opacity-100', 'z-10');
+                                        img.classList.remove('opacity-0', 'z-0');
+                                    } else {
+                                        img.classList.remove('opacity-100', 'z-10');
+                                        img.classList.add('opacity-0', 'z-0');
+                                    }
+                                }
+                                document.querySelectorAll('.thumbnail-nav button').forEach((thumb, i) => {
+                                    if (i === index) {
+                                        thumb.classList.add('ring-2', 'ring-blue-500', 'border-blue-500');
+                                    } else {
+                                        thumb.classList.remove('ring-2', 'ring-blue-500', 'border-blue-500');
+                                    }
+                                });
+                                // Update slide indicator
+                                const indicator = document.getElementById('slide-indicator');
+                                if (indicator) {
+                                    indicator.textContent = `Image ${index + 1} of ${totalSlides}`;
+                                }
+                            }
+                            function nextImage() {
+                                currentSlide = (currentSlide + 1) % totalSlides;
+                                showSlide(currentSlide);
+                            }
+                            function prevImage() {
+                                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                                showSlide(currentSlide);
+                            }
+                            function goToSlide(index) {
+                                currentSlide = index;
+                                showSlide(currentSlide);
+                            }
+                            // Auto-advance
+                            function startAutoAdvance() {
+                                if (autoAdvanceInterval) return;
+                                autoAdvanceInterval = setInterval(() => {
+                                    if (!isModalOpen) nextImage();
+                                }, 3500);
+                            }
+                            function stopAutoAdvance() {
+                                clearInterval(autoAdvanceInterval);
+                                autoAdvanceInterval = null;
+                            }
+                            // Modal/Lightbox
+                            function openModal() {
+                                isModalOpen = true;
+                                document.getElementById('imageModal').classList.remove('hidden');
+                                setModalImage(currentSlide);
+                            }
+                            function closeModal() {
+                                isModalOpen = false;
+                                document.getElementById('imageModal').classList.add('hidden');
+                            }
+                            function setModalImage(index) {
+                                const modalImg = document.getElementById('modalImage');
+                                modalImg.src = imageUrls[index];
+                                document.getElementById('modal-slide-indicator').textContent = `Image ${index + 1} of ${totalSlides}`;
+                            }
+                            function modalNextImage() {
+                                currentSlide = (currentSlide + 1) % totalSlides;
+                                setModalImage(currentSlide);
+                                showSlide(currentSlide);
+                            }
+                            function modalPrevImage() {
+                                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                                setModalImage(currentSlide);
+                                showSlide(currentSlide);
+                            }
+                            // Pause auto-advance on hover
+                            document.addEventListener('DOMContentLoaded', function() {
+                                showSlide(0);
+                                startAutoAdvance();
+                                document.querySelector('.main-carousel-img').parentElement.addEventListener('mouseenter', stopAutoAdvance);
+                                document.querySelector('.main-carousel-img').parentElement.addEventListener('mouseleave', startAutoAdvance);
+                            });
+                        </script>
                     @endif
 
                     <!-- Car Information -->
@@ -209,53 +312,4 @@
             </div>
         </div>
     </div>
-
-    @if($car->images->isNotEmpty())
-        <script>
-            let currentSlide = 0;
-            const totalSlides = {{ $car->images->count() }};
-
-            function showSlide(index) {
-                for (let i = 0; i < totalSlides; i++) {
-                    const img = document.getElementById(`slide-${i}`);
-                    img.style.opacity = '0';
-                    img.style.display = 'none';
-                }
-                const currentImg = document.getElementById(`slide-${index}`);
-                currentImg.style.opacity = '1';
-                currentImg.style.display = 'block';
-                document.querySelectorAll('.thumbnail-nav button').forEach((thumb, i) => {
-                    if (i === index) {
-                        thumb.classList.add('ring-2', 'ring-blue-500');
-                    } else {
-                        thumb.classList.remove('ring-2', 'ring-blue-500');
-                    }
-                });
-                // Update slide indicator
-                const indicator = document.getElementById('slide-indicator');
-                if (indicator) {
-                    indicator.textContent = `Image ${index + 1} of ${totalSlides}`;
-                }
-            }
-
-            function nextImage() {
-                currentSlide = (currentSlide + 1) % totalSlides;
-                showSlide(currentSlide);
-            }
-
-            function prevImage() {
-                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-                showSlide(currentSlide);
-            }
-
-            function goToSlide(index) {
-                currentSlide = index;
-                showSlide(currentSlide);
-            }
-
-            document.addEventListener('DOMContentLoaded', function() {
-                showSlide(0);
-            });
-        </script>
-    @endif
 </x-app-layout> 

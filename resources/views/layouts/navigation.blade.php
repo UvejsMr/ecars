@@ -20,7 +20,7 @@
                     @endif
                     @if(auth()->check() && !auth()->user()->isServicer())
                         <x-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.*')">
-                            {{ __('Book Inspection') }}
+                            {{ __('Inspection Appointments') }}
                         </x-nav-link>
                     @endif
                 </div>
