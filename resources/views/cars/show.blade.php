@@ -255,7 +255,7 @@
                             </div>
 
                             <!-- Action Buttons -->
-                            @if(auth()->check() && auth()->id() !== $car->user_id)
+                            @if(auth()->check() && auth()->id() !== $car->user_id && !auth()->user()->isServicer() && !auth()->user()->isAdmin())
                                 <div class="flex flex-col gap-3">
                                     <div class="flex gap-3">
                                         <a href="{{ route('chat.start', $car->id) }}"
@@ -266,15 +266,14 @@
                                             </svg>
                                             Chat with Seller
                                         </a>
-                                        @if(!auth()->user()->isServicer())
-                                            <a href="{{ route('appointments.select-servicer', $car) }}"
-                                               class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg font-semibold shadow hover:bg-green-700 transition">
-                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                                Book Inspection
-                                            </a>
-                                        @endif
+                                        
+                                        <a href="{{ route('appointments.select-servicer', $car) }}"
+                                           class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg font-semibold shadow hover:bg-green-700 transition">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            Book Inspection
+                                        </a>
                                     </div>
                                     <form action="{{ route('favorites.toggle', $car) }}" method="POST" class="w-full">
                                         @csrf

@@ -13,12 +13,12 @@
                     <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                         {{ __('Welcome Page') }}
                     </x-nav-link>
-                    @if(!auth()->user()->isServicer())
+                    @if(!auth()->user()->isServicer() && !auth()->user()->isAdmin())
                         <x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')">
                             {{ __('Messages') }}
                         </x-nav-link>
                     @endif
-                    @if(auth()->check() && !auth()->user()->isServicer())
+                    @if(auth()->check() && !auth()->user()->isServicer() && !auth()->user()->isAdmin())
                         <x-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.*')">
                             {{ __('Inspection Appointments') }}
                         </x-nav-link>
@@ -75,7 +75,7 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            @if(!auth()->user()->isServicer())
+            @if(!auth()->user()->isServicer() && !auth()->user()->isAdmin())
                 <x-responsive-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')">
                     {{ __('Messages') }}
                 </x-responsive-nav-link>

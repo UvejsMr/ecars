@@ -9,10 +9,10 @@
                     Back to Dashboard
                 </a>
             </div>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center flex-1">
                 {{ __('My Appointments') }}
             </h2>
-            <div></div>
+            <div class="w-[120px]"></div>
         </div>
     </x-slot>
 
