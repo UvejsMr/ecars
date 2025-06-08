@@ -53,6 +53,7 @@
             </div>
 
             <!-- User's Cars -->
+            @if($roleName === 'User')
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -117,6 +118,7 @@
                     @endif
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </x-app-layout> 

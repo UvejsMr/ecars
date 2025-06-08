@@ -224,6 +224,12 @@
                                 <div class="mb-2 text-gray-600 text-sm">
                                     <span class="font-medium">Location:</span> {{ $car->location }}
                                 </div>
+                                <div class="mb-2 text-gray-600 text-sm flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    <span>Posted by: {{ $car->user->name }}</span>
+                                </div>
                             </div>
                             <div class="mt-4">
                                 @auth
