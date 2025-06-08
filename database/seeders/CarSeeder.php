@@ -6,7 +6,6 @@ use App\Models\Car;
 use App\Models\CarImage;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class CarSeeder extends Seeder
@@ -24,83 +23,8 @@ class CarSeeder extends Seeder
         'Kia' => ['Ceed', 'Sportage', 'Sorento', 'Rio', 'Stinger'],
     ];
 
-    private $usedImageUrls = [];
-
-    private function getCarImage($make, $model, $index)
+    private function getDefaultCarImage()
     {
-        try {
-            // Add some variety to the search query
-            $searchTerms = [
-                "{$make} {$model} car",
-                "{$make} {$model} exterior",
-                "{$make} {$model} front view",
-                "{$make} {$model} side view",
-                "{$make} {$model} rear view"
-            ];
-            
-            // Use different search terms for different images
-            $query = $searchTerms[$index % count($searchTerms)];
-            
-            // Search for car images on Unsplash with a random page
-            $page = rand(1, 5); // Unsplash allows up to 5 pages of results
-            $response = Http::get('https://api.unsplash.com/search/photos', [
-                'query' => $query,
-                'per_page' => 1,
-                'page' => $page,
-                'orientation' => 'landscape',
-                'client_id' => env('UNSPLASH_ACCESS_KEY')
-            ]);
-
-            // Log the API response
-            \Log::info('Unsplash API Response:', [
-                'status' => $response->status(),
-                'headers' => $response->headers(),
-                'body' => $response->json()
-            ]);
-
-            if ($response->status() === 403) {
-                \Log::error('Unsplash API rate limit exceeded');
-                return 'car-images/default-car.jpg';
-            }
-
-            if ($response->successful() && !empty($response->json()['results'])) {
-                $imageUrl = $response->json()['results'][0]['urls']['regular'];
-                
-                // Check if we've already used this image URL
-                if (in_array($imageUrl, $this->usedImageUrls)) {
-                    // If we've used this URL, try again with a different page
-                    return $this->getCarImage($make, $model, $index + 1);
-                }
-                
-                // Add the URL to our used URLs list
-                $this->usedImageUrls[] = $imageUrl;
-                
-                // Download the image
-                $imageContent = file_get_contents($imageUrl);
-                if ($imageContent) {
-                    // Generate a unique filename
-                    $filename = 'car-images/' . uniqid() . '.jpg';
-                    
-                    // Store the image
-                    $stored = Storage::disk('public')->put($filename, $imageContent);
-                    
-                    if ($stored) {
-                        \Log::info('Image stored successfully:', ['path' => $filename]);
-                        return $filename;
-                    } else {
-                        \Log::error('Failed to store image:', ['path' => $filename]);
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            \Log::error('Error fetching car image: ' . $e->getMessage(), [
-                'make' => $make,
-                'model' => $model,
-                'index' => $index
-            ]);
-        }
-
-        // Fallback to a default car image if the API call fails
         return 'car-images/default-car.jpg';
     }
 
@@ -137,12 +61,11 @@ class CarSeeder extends Seeder
                     'model' => $model
                 ]);
 
-                // Add 4-5 images for each car
+                // Add 4-5 images for each car using default image
                 $numImages = rand(4, 5);
                 for ($j = 0; $j < $numImages; $j++) {
-                    $imagePath = $this->getCarImage($make, $model, $j);
                     $car->images()->create([
-                        'image_path' => $imagePath,
+                        'image_path' => $this->getDefaultCarImage(),
                         'order' => $j
                     ]);
                 }
