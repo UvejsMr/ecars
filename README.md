@@ -42,7 +42,7 @@ eCars is a modern web application built with Laravel that serves as a comprehens
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
+git clone [(https://github.com/UvejsMr/ecars.git)]
 cd ecars
 ```
 
@@ -116,7 +116,6 @@ npm run dev
 
 ### Servicer
 - Can view inspection requests
-- Can provide inspection reports
 - Can verify car conditions
 - Has access to servicer dashboard
 
@@ -141,4 +140,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support, email [support@ecars.com](mailto:support@ecars.com) or open an issue in the repository.
+For support, email [um30025@seeu.edu.mk](mailto:um30025@seeu.edu.mk) or open an issue in the repository.
