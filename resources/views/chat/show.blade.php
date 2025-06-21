@@ -171,7 +171,7 @@
                     }
                 });
 
-                // Hide typing indicator when message is sent
+                // Handle form submission
                 chatForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     

@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <!-- Start Chat Form -->
-                <form id="start-chat-form" class="space-y-4">
+                <form action="{{ route('chat.store', [$car->id, $car->user_id]) }}" method="POST" class="space-y-4">
                     @csrf
                     <div>
                         <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
@@ -77,7 +77,7 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('start-chat-form');
+            const form = document.querySelector('form');
             const messageInput = document.getElementById('message');
             const sendButton = document.getElementById('send-button');
             const sendText = document.getElementById('send-text');
@@ -97,48 +97,18 @@
 
             // Handle form submission
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
                 const message = messageInput.value.trim();
-                if (!message) return;
+                if (!message) {
+                    e.preventDefault();
+                    return;
+                }
                 
                 // Disable form while sending
                 sendButton.disabled = true;
                 sendText.textContent = 'Sending...';
                 messageInput.disabled = true;
                 
-                // Send message via AJAX
-                fetch('{{ route("chat.store", [$car->id, $car->user_id]) }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({ message: message })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Redirect to chat page
-                        window.location.href = '{{ route("chat.show", [$car->id, $car->user_id]) }}';
-                    } else {
-                        alert('Error sending message. Please try again.');
-                        // Re-enable form
-                        sendButton.disabled = false;
-                        sendText.textContent = 'Send Message';
-                        messageInput.disabled = false;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error sending message. Please try again.');
-                    // Re-enable form
-                    sendButton.disabled = false;
-                    sendText.textContent = 'Send Message';
-                    messageInput.disabled = false;
-                });
+                // Let the form submit normally (no preventDefault)
             });
 
             // Add fade-in animation to card

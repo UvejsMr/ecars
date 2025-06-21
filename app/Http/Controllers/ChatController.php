@@ -51,7 +51,10 @@ class ChatController extends Controller
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
-        return view('chat.show', compact('car', 'otherUser', 'messages'));
+        // Check if this is a new conversation (no messages yet)
+        $isNewConversation = $messages->isEmpty();
+
+        return view('chat.show', compact('car', 'otherUser', 'messages', 'isNewConversation'));
     }
 
     public function store(Request $request, $carId, $userId)

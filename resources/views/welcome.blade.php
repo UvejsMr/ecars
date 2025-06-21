@@ -311,7 +311,7 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
-                                +1 234 567 890
+                                +38972547373
                             </li>
                         </ul>
                     </div>
@@ -332,12 +332,12 @@
                 </div>
                 <div class="border-t border-gray-200 pt-8 text-center">
                     <p class="text-gray-600 mb-4">&copy; {{ date('Y') }} ECars. All rights reserved.</p>
-                    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-900 transition text-sm">
+                    <button id="back-to-top" class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-sm font-semibold opacity-0 invisible" onclick="scrollToTop()" aria-label="Back to top">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                         </svg>
-                        Back to top
-                    </a>
+                        Back to Top
+                    </button>
                 </div>
             </div>
         </footer>
@@ -346,12 +346,31 @@
             // Add scroll event listener for navbar
             window.addEventListener('scroll', function() {
                 const nav = document.getElementById('main-nav');
+                const backToTopBtn = document.getElementById('back-to-top');
+                
                 if (window.scrollY > 50) {
                     nav.classList.add('nav-scrolled');
                 } else {
                     nav.classList.remove('nav-scrolled');
                 }
+                
+                // Show/hide back to top button
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.remove('opacity-0', 'invisible');
+                    backToTopBtn.classList.add('opacity-100', 'visible');
+                } else {
+                    backToTopBtn.classList.add('opacity-0', 'invisible');
+                    backToTopBtn.classList.remove('opacity-100', 'visible');
+                }
             });
+            
+            // Smooth scroll to top function
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
         </script>
     </body>
 </html>
