@@ -98,12 +98,29 @@ class AppointmentController extends Controller
 
             \Log::info('Generated all slots', ['slots' => $allSlots]);
 
-            // Get booked appointments for this date
-            $bookedSlots = Appointment::where('servicer_id', $servicer->id)
+            // Get booked appointments for this date with more detailed logging
+            $bookedAppointments = Appointment::where('servicer_id', $servicer->id)
                 ->whereDate('appointment_date', $date)
                 ->where('status', '!=', 'cancelled')
-                ->pluck('start_time')
-                ->toArray();
+                ->get();
+
+            \Log::info('Found booked appointments', [
+                'count' => $bookedAppointments->count(),
+                'appointments' => $bookedAppointments->map(function($apt) {
+                    return [
+                        'id' => $apt->id,
+                        'date' => $apt->appointment_date,
+                        'start_time' => $apt->start_time,
+                        'start_time_formatted' => $apt->start_time->format('H:i'),
+                        'status' => $apt->status
+                    ];
+                })->toArray()
+            ]);
+
+            // Convert time objects to string format for comparison
+            $bookedSlots = $bookedAppointments->map(function($apt) {
+                return $apt->start_time->format('H:i');
+            })->toArray();
 
             \Log::info('Found booked slots', ['booked_slots' => $bookedSlots]);
 
@@ -111,12 +128,14 @@ class AppointmentController extends Controller
             $availableSlots = array_diff($allSlots, $bookedSlots);
             $availableSlots = array_values($availableSlots);
 
-            \Log::info('Returning available slots', ['available_slots' => $availableSlots]);
-
-            // Force return some slots for testing
-            if (empty($availableSlots)) {
-                $availableSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
-            }
+            \Log::info('Returning available slots', [
+                'available_slots' => $availableSlots,
+                'total_slots' => count($allSlots),
+                'booked_count' => count($bookedSlots),
+                'available_count' => count($availableSlots),
+                'all_slots' => $allSlots,
+                'booked_slots' => $bookedSlots
+            ]);
 
             return response()->json($availableSlots);
         } catch (\Exception $e) {

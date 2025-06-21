@@ -58,7 +58,7 @@
                                         @foreach($appointments as $appointment)
                                             <tr class="hover:bg-blue-50 transition-colors duration-150 even:bg-gray-50">
                                                 <td class="px-6 py-4 whitespace-nowrap">{{ $appointment->appointment_date->format('M d, Y') }}</td>
-                                                <td class="px-6 py-4 whitespace-nowrap">{{ $appointment->start_time }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($appointment->start_time)->format('g:i A') }}</td>
                                                 <td class="px-6 py-4 whitespace-nowrap flex items-center gap-2">
                                                     @if($appointment->servicer->logo)
                                                         <img src="{{ Storage::url($appointment->servicer->logo) }}" alt="Logo" class="w-8 h-8 rounded-full object-cover border">
@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="flex flex-wrap gap-2 text-sm">
                                         <span class="inline-block px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold">{{ $appointment->appointment_date->format('M d, Y') }}</span>
-                                        <span class="inline-block px-2 py-0.5 rounded bg-gray-100 text-gray-700 font-semibold">{{ $appointment->start_time }}</span>
+                                        <span class="inline-block px-2 py-0.5 rounded bg-gray-100 text-gray-700 font-semibold">{{ \Carbon\Carbon::parse($appointment->start_time)->format('g:i A') }}</span>
                                         <span class="inline-block px-2 py-0.5 rounded bg-green-100 text-green-700 font-semibold">{{ ucfirst($appointment->status) }}</span>
                                     </div>
                                     <div class="flex gap-2 mt-2">

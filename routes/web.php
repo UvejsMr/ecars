@@ -87,4 +87,24 @@ Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     }
 })->name('dashboard');
 
+// Temporary debug route - remove after testing
+Route::get('/debug/appointments/{servicerId}', function($servicerId) {
+    $appointments = \App\Models\Appointment::where('servicer_id', $servicerId)
+        ->where('status', '!=', 'cancelled')
+        ->get();
+    
+    return response()->json([
+        'total_appointments' => $appointments->count(),
+        'appointments' => $appointments->map(function($apt) {
+            return [
+                'id' => $apt->id,
+                'date' => $apt->appointment_date,
+                'start_time' => $apt->start_time,
+                'status' => $apt->status,
+                'servicer_id' => $apt->servicer_id
+            ];
+        })
+    ]);
+});
+
 require __DIR__.'/auth.php';
