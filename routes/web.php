@@ -10,6 +10,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
@@ -42,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/{carId}/{userId}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{carId}/{userId}', [ChatController::class, 'store'])->name('chat.store');
+    Route::get('/chat/{carId}/{userId}/messages', [ChatController::class, 'getNewMessages'])->name('chat.messages');
 
     // Appointment routes
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');

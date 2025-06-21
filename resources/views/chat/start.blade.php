@@ -45,24 +45,29 @@
                     </div>
                 </div>
                 <!-- Start Chat Form -->
-                <form action="{{ route('chat.store', [$car->id, $car->user_id]) }}" method="POST">
+                <form id="start-chat-form" class="space-y-4">
                     @csrf
-                    <div class="space-y-4">
-                        <div>
-                            <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
-                            <textarea name="message" id="message" rows="5"
-                                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                      placeholder="Write your message to the seller..." required></textarea>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                        <textarea name="message" id="message" rows="5"
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                  placeholder="Write your message to the seller..." required maxlength="1000"
+                                  aria-label="Write your message to the seller"></textarea>
+                        <div class="text-xs text-gray-500 mt-1 text-right">
+                            <span id="char-count">0</span>/1000
                         </div>
-                        <div class="flex justify-end">
-                            <button type="submit"
-                                    class="inline-flex items-center gap-2 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Send Message
-                            </button>
-                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" id="send-button"
+                                class="inline-flex items-center gap-2 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                aria-label="Send message to seller"
+                                title="Send message to seller">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span id="send-text">Send Message</span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -71,16 +76,76 @@
 
     @push('scripts')
     <script>
-        // Add fade-in animation to card
         document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('start-chat-form');
+            const messageInput = document.getElementById('message');
+            const sendButton = document.getElementById('send-button');
+            const sendText = document.getElementById('send-text');
+            const charCount = document.getElementById('char-count');
+
+            // Character count
+            messageInput.addEventListener('input', function() {
+                const count = this.value.length;
+                charCount.textContent = count;
+                
+                if (count > 900) {
+                    charCount.classList.add('text-red-500');
+                } else {
+                    charCount.classList.remove('text-red-500');
+                }
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const message = messageInput.value.trim();
+                if (!message) return;
+                
+                // Disable form while sending
+                sendButton.disabled = true;
+                sendText.textContent = 'Sending...';
+                messageInput.disabled = true;
+                
+                // Send message via AJAX
+                fetch('{{ route("chat.store", [$car->id, $car->user_id]) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirect to chat page
+                        window.location.href = '{{ route("chat.show", [$car->id, $car->user_id]) }}';
+                    } else {
+                        alert('Error sending message. Please try again.');
+                        // Re-enable form
+                        sendButton.disabled = false;
+                        sendText.textContent = 'Send Message';
+                        messageInput.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error sending message. Please try again.');
+                    // Re-enable form
+                    sendButton.disabled = false;
+                    sendText.textContent = 'Send Message';
+                    messageInput.disabled = false;
+                });
+            });
+
+            // Add fade-in animation to card
             const fadeEls = document.querySelectorAll('.fade-in');
             fadeEls.forEach((el, index) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
                 setTimeout(() => {
-                    el.style.transition = 'all 0.5s ease-out';
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
+                    el.classList.add('fade-in-animation');
                 }, index * 100);
             });
         });
