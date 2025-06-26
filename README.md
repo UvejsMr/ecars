@@ -34,7 +34,16 @@ eCars is a modern web application built with Laravel that serves as a comprehens
 - **Database:** MySQL
 - **Authentication:** Laravel Breeze
 - **File Storage:** Laravel Storage
-- **Real-time Features:** Laravel Echo
+
+  ## Prerequisites
+
+- PHP >= 8.1
+- Composer
+- Node.js and NPM
+- MySQL (can be run via XAMPP)
+
+> **Important:** Make sure you have [XAMPP](https://www.apachefriends.org/index.html) installed and running.
+> Start **Apache** and **MySQL** using the XAMPP Control Panel before continuing.
 
 ## Installation
 
@@ -79,24 +88,38 @@ DB_PASSWORD=your_password
 php artisan migrate
 ```
 
-8. Create storage link:
+8. Run database seeders (recommended):
+```bash
+php artisan db:seed --class=DatabaseSeeder
+```
+This will run the DatabaseSeeder, which includes:
+
+- RoleSeeder – to create roles (Admin, User, Servicer)
+
+- UserSeeder – to create a default admin user:
+
+        Email: admin@ecars.com
+
+        Password: admin123
+
+9. Create storage link:
 ```bash
 php artisan storage:link
 ```
 
-9. Start the development server:
+10. Start the development server:
 ```bash
 php artisan serve
 ```
 
-10. In a separate terminal, start Vite:
+11. In a separate terminal, start Vite:
 ```bash
 npm run dev
 ```
 
 ## Usage
 
-1. Register a new account or log in (can seed the database to create an admin user)
+1. Register a new account or log in 
 2. Browse available cars
 3. Use the search and filter functions to find specific cars
 4. View car details and contact sellers
