@@ -69,7 +69,7 @@ php artisan key:generate
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=ecars
+DB_DATABASE=ecarsmk
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
