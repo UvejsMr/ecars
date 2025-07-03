@@ -16,6 +16,7 @@ eCars is a modern web application built with Laravel that serves as a comprehens
 
 ### For Servicers
 - View and manage inspection requests
+- Update bussiness information
 - Access servicer dashboard
 - Manage service appointments
 
@@ -146,6 +147,11 @@ npm run dev
 - Can verify servicer accounts
 - Has access to admin dashboard
 - Can manage system settings
+
+## Acknowledgments
+
+- The eCars project was developed by [Uvejs Murtezi](https://github.com/UvejsMr) as a Capstone Project required for Bachelor Degree of Computer Science at Southeast European University.
+- Expressing deepest gratitude and special thanks to my mentor prof. Besnik Selimi for providing unwavering support, valuable feedback and guidance throughout developing the project.
 
 ## License
 
