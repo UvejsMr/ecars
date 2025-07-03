@@ -5,19 +5,17 @@ eCars is a modern web application built with Laravel that serves as a comprehens
 ## Features
 
 ### For Regular Users
-- Browse and search for cars
+- Browse and search for cars with sortings and filters
 - View detailed car listings with images and specifications
 - Chat with sellers
 - Book car inspections
 - Add cars to watchlist
 - Post cars for sale
 - Manage personal car listings
-- View car history and details
+- View car details
 
 ### For Servicers
 - View and manage inspection requests
-- Verify car conditions
-- Provide inspection reports
 - Access servicer dashboard
 - Manage service appointments
 
@@ -36,7 +34,16 @@ eCars is a modern web application built with Laravel that serves as a comprehens
 - **Database:** MySQL
 - **Authentication:** Laravel Breeze
 - **File Storage:** Laravel Storage
-- **Real-time Features:** Laravel Echo
+
+  ## Prerequisites
+
+- PHP >= 8.1
+- Composer
+- Node.js and NPM
+- MySQL (can be run via XAMPP)
+
+> **Important:** Make sure you have [XAMPP](https://www.apachefriends.org/index.html) installed and running.
+> Start **Apache** and **MySQL** using the XAMPP Control Panel before continuing.
 
 ## Installation
 
@@ -71,7 +78,7 @@ php artisan key:generate
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=ecars
+DB_DATABASE=ecarsmk
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
@@ -81,24 +88,38 @@ DB_PASSWORD=your_password
 php artisan migrate
 ```
 
-8. Create storage link:
+8. Run database seeders (recommended):
+```bash
+php artisan db:seed --class=DatabaseSeeder
+```
+This will run the DatabaseSeeder, which includes:
+
+- RoleSeeder – to create roles (Admin, User, Servicer)
+
+- UserSeeder – to create a default admin user:
+
+        Email: admin@ecars.com
+
+        Password: admin123
+
+9. Create storage link:
 ```bash
 php artisan storage:link
 ```
 
-9. Start the development server:
+10. Start the development server:
 ```bash
 php artisan serve
 ```
 
-10. In a separate terminal, start Vite:
+11. In a separate terminal, start Vite:
 ```bash
 npm run dev
 ```
 
 ## Usage
 
-1. Register a new account or log in
+1. Register a new account or log in 
 2. Browse available cars
 3. Use the search and filter functions to find specific cars
 4. View car details and contact sellers
@@ -116,7 +137,7 @@ npm run dev
 
 ### Servicer
 - Can view inspection requests
-- Can verify car conditions
+- Can accept, mark as completed an appointment
 - Has access to servicer dashboard
 
 ### Administrator
@@ -125,14 +146,6 @@ npm run dev
 - Can verify servicer accounts
 - Has access to admin dashboard
 - Can manage system settings
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## License
 
