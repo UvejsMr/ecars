@@ -61,4 +61,9 @@ class Car extends Model
     {
         return $this->favorites()->where('user_id', $user->id)->exists();
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 } 

@@ -243,6 +243,85 @@
                 </div>
             </div>
 
+            <!-- Appointments with My Cars Section -->
+            <div class="bg-white shadow-2xl sm:rounded-2xl mb-12 border border-blue-100">
+                <div class="p-8">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-800 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                        </svg>
+                        Appointments with My Cars
+                        <span class="ml-2 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Owner View</span>
+                    </h3>
+                    <p class="text-gray-500 mb-6">See all appointments other users have made with your listed cars.</p>
+                    @php
+                        $myCarAppointments = collect();
+                        foreach(auth()->user()->cars as $car) {
+                            $myCarAppointments = $myCarAppointments->concat($car->appointments);
+                        }
+                        $myCarAppointments = $myCarAppointments->sortByDesc('appointment_date');
+                    @endphp
+                    @if($myCarAppointments->isEmpty())
+                        <div class="text-center py-12 flex flex-col items-center justify-center">
+                            <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/car.svg" alt="No Appointments" class="mx-auto mb-4 w-16 h-16 opacity-70" />
+                            <p class="text-lg text-blue-400 font-semibold mb-2">No appointments yet!</p>
+                            <p class="text-gray-400">No one has booked an appointment with your cars yet. Once they do, you'll see them here.</p>
+                        </div>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Car</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booked By</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Servicer</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                    @foreach($myCarAppointments as $appointment)
+                                        <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }} hover:bg-blue-100 transition">
+                                            <td class="px-4 py-2 whitespace-nowrap font-semibold text-gray-800">
+                                                {{ $appointment->car->full_name ?? ($appointment->car->make . ' ' . $appointment->car->model) }}
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap text-gray-700 flex items-center gap-2">
+                                                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-200 text-blue-700 font-bold text-sm">
+                                                    {{ strtoupper(substr($appointment->user->name ?? 'N', 0, 1)) }}
+                                                </span>
+                                                <span>{{ $appointment->user->name ?? 'N/A' }}</span>
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap text-gray-700">
+                                                {{ $appointment->servicer->company_name ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap text-gray-700">
+                                                {{ $appointment->appointment_date ? $appointment->appointment_date->format('M d, Y') : 'N/A' }}
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap text-gray-700">
+                                                {{ $appointment->start_time ? \Carbon\Carbon::parse($appointment->start_time)->format('H:i') : 'N/A' }} - {{ $appointment->end_time ? \Carbon\Carbon::parse($appointment->end_time)->format('H:i') : 'N/A' }}
+                                            </td>
+                                            <td class="px-4 py-2 whitespace-nowrap">
+                                                <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                                    {{
+                                                        $appointment->status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                        ($appointment->status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                                                        ($appointment->status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                                                        'bg-red-100 text-red-800'))
+                                                    }}">
+                                                    {{ ucfirst($appointment->status) }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             <!-- Recent Activity -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">

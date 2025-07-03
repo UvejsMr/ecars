@@ -80,7 +80,7 @@
                 <h1 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">Find Your Dream Car</h1>
                 <p class="text-lg md:text-xl mb-8 drop-shadow max-w-2xl mx-auto">Browse through our extensive collection of premium vehicles and find the perfect match for your lifestyle</p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#car-listings" class="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-blue-50 hover:text-blue-900 transition text-lg">
+                    <a href="#car-listings" id="browse-cars-btn" class="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl shadow-lg hover:bg-blue-50 hover:text-blue-900 transition text-lg">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
@@ -126,7 +126,7 @@
                                 @endforeach
                             </select>
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400 pointer-events-none">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" /></svg>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13l2-2m0 0l7-7 7 7M5 11v8a2 2 0 002 2h10a2 2 0 002-2v-8" /></svg>
                             </span>
                         </div>
                     </div>
@@ -139,28 +139,38 @@
                                     <option value="{{ $fuelType }}" {{ ($fuel ?? '') === $fuelType ? 'selected' : '' }}>{{ $fuelType }}</option>
                                 @endforeach
                             </select>
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-yellow-400 pointer-events-none">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-yellow-500 pointer-events-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="13" height="18" rx="2"/><path d="M16 7v8a2 2 0 002 2h1a2 2 0 002-2v-5a2 2 0 00-2-2h-1"/></svg>
                             </span>
                         </div>
                     </div>
                     <div>
                         <label class="font-semibold block mb-2 text-gray-700" for="location">Location</label>
-                        <select name="location" id="location" class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <option value="all" {{ ($location ?? '') === 'all' ? 'selected' : '' }}>All Locations</option>
-                            @foreach($locations as $loc)
-                                <option value="{{ $loc }}" {{ ($location ?? '') === $loc ? 'selected' : '' }}>{{ $loc }}</option>
-                            @endforeach
-                        </select>
+                        <div class="relative">
+                            <select name="location" id="location" class="w-full rounded-lg border border-slate-300 px-4 py-2 pl-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <option value="all" {{ ($location ?? '') === 'all' ? 'selected' : '' }}>All Locations</option>
+                                @foreach($locations as $loc)
+                                    <option value="{{ $loc }}" {{ ($location ?? '') === $loc ? 'selected' : '' }}>{{ $loc }}</option>
+                                @endforeach
+                            </select>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21C12 21 7 16.5 7 12A5 5 0 0117 12c0 4.5-5 9-5 9z"/><circle cx="12" cy="12" r="2"/></svg>
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <label class="font-semibold block mb-2 text-gray-700" for="gearbox">Gearbox</label>
-                        <select name="gearbox" id="gearbox" class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                            <option value="all" {{ ($gearbox ?? '') === 'all' ? 'selected' : '' }}>All Gearboxes</option>
-                            @foreach($gearboxes as $gb)
-                                <option value="{{ $gb }}" {{ ($gearbox ?? '') === $gb ? 'selected' : '' }}>{{ $gb }}</option>
-                            @endforeach
-                        </select>
+                        <div class="relative">
+                            <select name="gearbox" id="gearbox" class="w-full rounded-lg border border-slate-300 px-4 py-2 pl-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <option value="all" {{ ($gearbox ?? '') === 'all' ? 'selected' : '' }}>All Gearboxes</option>
+                                @foreach($gearboxes as $gb)
+                                    <option value="{{ $gb }}" {{ ($gearbox ?? '') === $gb ? 'selected' : '' }}>{{ $gb }}</option>
+                                @endforeach
+                            </select>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500 pointer-events-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h.09A1.65 1.65 0 0011 3.09V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h.09a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v.09c0 .66.26 1.3.73 1.77.47.47 1.11.73 1.77.73h.09a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                            </span>
+                        </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
@@ -172,25 +182,38 @@
                             <input type="number" name="mileage_max" id="mileage_max" class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Max" min="0" value="{{ old('mileage_max', $mileage_max) }}">
                         </div>
                     </div>
-                    <div>
+                    <div class="relative">
                         <label class="font-semibold block mb-2 text-gray-700" for="sort_price">Price</label>
-                        <select name="sort_price" id="sort_price" class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <select name="sort_price" id="sort_price" class="w-full rounded-lg border border-slate-300 px-4 py-2 pl-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                             <option value="default" {{ ($sort_price ?? '') === 'default' ? 'selected' : '' }}>Default</option>
                             <option value="price_asc" {{ ($sort_price ?? '') === 'price_asc' ? 'selected' : '' }}>Cheapest first</option>
                             <option value="price_desc" {{ ($sort_price ?? '') === 'price_desc' ? 'selected' : '' }}>Most expensive first</option>
                         </select>
+                        <span class="pointer-events-none absolute left-3 top-1/2" style="transform: translateY(20%);">
+                            <!-- Money/banknote icon -->
+                            <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <rect x="2" y="7" width="20" height="10" rx="2"/>
+                              <circle cx="12" cy="12" r="3"/>
+                              <path d="M2 10h.01M22 10h-.01M2 14h.01M22 14h-.01"/>
+                            </svg>
+                        </span>
                     </div>
-                    <div>
+                    <div class="relative">
                         <label class="font-semibold block mb-2 text-gray-700" for="sort_year">Year</label>
-                        <select name="sort_year" id="sort_year" class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <select name="sort_year" id="sort_year" class="w-full rounded-lg border border-slate-300 px-4 py-2 pl-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                             <option value="default" {{ ($sort_year ?? '') === 'default' ? 'selected' : '' }}>Default</option>
                             <option value="year_desc" {{ ($sort_year ?? '') === 'year_desc' ? 'selected' : '' }}>Newest first</option>
                             <option value="year_asc" {{ ($sort_year ?? '') === 'year_asc' ? 'selected' : '' }}>Oldest first</option>
                         </select>
+                        <span class="pointer-events-none absolute left-3 top-1/2" style="transform: translateY(10%);">
+                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                        </span>
                     </div>
                     <div class="flex items-end justify-end col-span-1 md:col-span-3 lg:col-span-4">
                         <button type="submit" class="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                            <svg class="h-5 w-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
                             Filter
                         </button>
                     </div>
@@ -371,6 +394,19 @@
                     behavior: 'smooth'
                 });
             }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const browseBtn = document.getElementById('browse-cars-btn');
+                if (browseBtn) {
+                    browseBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = document.getElementById('car-listings');
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+            });
         </script>
     </body>
 </html>

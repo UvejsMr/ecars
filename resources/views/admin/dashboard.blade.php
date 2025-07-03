@@ -19,7 +19,7 @@
                             </svg>
                         </div>
                         <div class="text-lg font-semibold text-gray-700">Total Users</div>
-                        <div class="text-3xl font-bold mt-1 text-gray-900">{{ $users->count() }}</div>
+                        <div class="text-3xl font-bold mt-1 text-gray-900">{{ $totalUsers }}</div>
                     </div>
                     <div class="flex-1 flex flex-col items-center justify-center">
                         <div class="flex items-center justify-center w-16 h-16 rounded-full bg-green-600 mb-2">

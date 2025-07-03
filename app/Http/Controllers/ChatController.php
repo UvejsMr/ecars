@@ -22,6 +22,11 @@ class ChatController extends Controller
                 return $message->car_id . '_' . ($message->sender_id === $user->id ? $message->receiver_id : $message->sender_id);
             });
 
+        // Sort conversations by most recent message
+        $conversations = $conversations->sortByDesc(function($messages) {
+            return $messages->last()->created_at;
+        });
+
         return view('chat.index', compact('conversations'));
     }
 

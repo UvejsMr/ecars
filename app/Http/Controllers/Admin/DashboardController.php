@@ -27,6 +27,7 @@ class DashboardController extends Controller
         $cars = Car::with('user')->paginate(6)->withQueryString();
         $totalCars = Car::count();
         $unverifiedServicers = Servicer::where('is_verified', false)->with('user')->get();
+        $totalUsers = User::count();
         
         // Debug
         foreach ($users as $user) {
@@ -37,7 +38,7 @@ class DashboardController extends Controller
             ]);
         }
         
-        return view('admin.dashboard', compact('users', 'cars', 'unverifiedServicers', 'search', 'totalCars'));
+        return view('admin.dashboard', compact('users', 'cars', 'unverifiedServicers', 'search', 'totalCars', 'totalUsers'));
     }
 
     public function approveUser(User $user)
